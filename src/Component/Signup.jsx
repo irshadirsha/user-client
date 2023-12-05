@@ -1,5 +1,5 @@
-import React,{useState} from 'react'
-import {useNavigate} from 'react-router-dom'
+import React,{useState,useEffect} from 'react'
+import {Navigate, useNavigate} from 'react-router-dom'
 import axios from 'axios';
 function Signup() {
   const navigate=useNavigate()
@@ -21,7 +21,18 @@ function Signup() {
         console.log("destru",token);
         // localStorage.setItem('user', JSON.stringify({ token, user: data.data }))
         localStorage.setItem('user',JSON.stringify({token,user:response.data}))
-        navigate('/')
+        if(response.data.created){
+          navigate('/')
+        }
+      }
+      useEffect(() => {
+        const user = localStorage.getItem('user')
+        if (user) {
+          navigate('/')
+        }
+      }, [])
+      const navToLogin=()=>{
+        navigate('/login')
       }
   return (
     <div>
@@ -93,6 +104,7 @@ function Signup() {
                     <button onClick={handleSignup}
                     className="w-full h-10 text-white bg-[#6d42d8] rounded-lg shadow-lg">Signup</button>
                   </div>
+                  <h1 onClick={navToLogin} className='text-white'>Login</h1>
                 </div>
               </div>
             </div>
