@@ -21,10 +21,17 @@ function Home() {
     const parsedUserData = JSON.parse(storedUserData);
     console.log("user email:", parsedUserData.user.data.email);
     const mail = parsedUserData.user.data.email;
+    console.log(parsedUserData.token   );
 
     try {
+      // const response = await axios.get('http://localhost:3000/getdata', {
+      //   params: { email: mail },  
+      // });
       const response = await axios.get('http://localhost:3000/getdata', {
-        params: { email: mail },  
+        params: { email: mail },
+        headers: {
+          Authorization: `Bearer ${parsedUserData.token}`,
+        },
       });
 
       console.log(response.data);

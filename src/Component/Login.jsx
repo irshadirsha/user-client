@@ -2,6 +2,9 @@
 import React,{useState,useEffect} from 'react'
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 function Login() {
   const navigate=useNavigate()
     const [logindata, setLoginData] = useState({
@@ -14,12 +17,16 @@ function Login() {
         console.log(logindata.password);
         const res = await axios.post('http://localhost:3000/login', { ...logindata });
         console.log("front end bscc",res.data);
+        if(res.data.exist===false){
+          toast.error(res.data.status, { position: 'top-center', autoClose: 3000 });
+        }else{
         const {token}= res.data
         console.log(token);
         localStorage.setItem('user',JSON.stringify({token,user:res.data}))
         if(res.data.exist){
           navigate('/')
         }
+      }
       }
       useEffect(() => {
         const user = localStorage.getItem('user')
@@ -90,6 +97,7 @@ function Login() {
             </div>
         </div>
       </div>
+      <ToastContainer />
     </div>
   )
 }

@@ -1,6 +1,9 @@
 import React,{useState,useEffect} from 'react'
 import {Navigate, useNavigate} from 'react-router-dom'
 import axios from 'axios';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 function Signup() {
   const navigate=useNavigate()
     const [signupdata, setSignupData] = useState({
@@ -17,6 +20,9 @@ function Signup() {
         console.log(signupdata.password)
         const response=await axios.post('http://localhost:3000/register',{...signupdata})
         console.log("reached",response.data);
+        if(response.data.created===false){
+          toast.error(response.data.status, { position: 'top-center', autoClose: 3000 });
+        }else{
         const {token}= response.data
         console.log("destru",token);
         // localStorage.setItem('user', JSON.stringify({ token, user: data.data }))
@@ -24,6 +30,7 @@ function Signup() {
         if(response.data.created){
           navigate('/')
         }
+      }
       }
       useEffect(() => {
         const user = localStorage.getItem('user')
@@ -122,6 +129,7 @@ function Signup() {
             </div>
         </div>
       </div>
+      <ToastContainer />
     </div>
   )
 }
