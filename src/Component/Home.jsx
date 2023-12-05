@@ -3,6 +3,8 @@ import React,{useState,useEffect} from 'react'
 import { useNavigate } from 'react-router-dom';
 
 function Home() {
+  const Url = import.meta.env.VITE_BASEURL;
+  const cloudName = import.meta.env.VITE_CLOUD_NAME;
   const navigate=useNavigate()
   const [isImageModalOpen, setIsImageModalOpen] = useState(false); 
   const [selectedImage, setSelectedImage] = useState({
@@ -27,7 +29,7 @@ function Home() {
     console.log(parsedUserData.token   );
 
     try {
-      const response = await axios.get('http://localhost:3000/getdata', {
+      const response = await axios.get(`${Url}/getdata`, {
         params: { email: mail },
         headers: {
           Authorization: `Bearer ${parsedUserData.token}`,
@@ -68,12 +70,12 @@ function Home() {
   formData.append('upload_preset', 'I-club')
   setIsImageModalOpen(false)
   console.log("formdataaa",formData)
-  const  data = await axios.post(`https://api.cloudinary.com/v1_1/dce326gqy/image/upload?upload_preset=I-club`,formData);
+  const  data = await axios.post(`https://api.cloudinary.com/v1_1/${cloudName}/image/upload?upload_preset=I-club`,formData);
  console.log("back from cloudinary",data);
  console.log("back from cloudinary",data.data.secure_url);
  const url=data.data.secure_url
  const response = await axios.post(
-  'http://localhost:3000/addimg',
+  `${Url}/addimg`,
   { url },  
   {
     headers: {

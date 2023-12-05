@@ -6,6 +6,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 function Login() {
+  const Url = import.meta.env.VITE_BASEURL;
   const navigate=useNavigate()
     const [logindata, setLoginData] = useState({
         email: '',
@@ -23,7 +24,7 @@ function Login() {
           toast.error("Please Enter Your Password", { position: 'top-center', autoClose: 3000 });
           return
         }
-        const res = await axios.post('http://localhost:3000/login', { ...logindata });
+        const res = await axios.post(`${Url}/login`, { ...logindata });
         console.log("front end bscc",res.data);
         if(res.data.exist===false){
           toast.error(res.data.status, { position: 'top-center', autoClose: 3000 });

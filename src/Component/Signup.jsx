@@ -5,6 +5,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 function Signup() {
+  const Url = import.meta.env.VITE_BASEURL;
   const navigate=useNavigate()
     const [signupdata, setSignupData] = useState({
         name: '',
@@ -29,14 +30,13 @@ function Signup() {
           return; 
         }
 
-        const response=await axios.post('http://localhost:3000/register',{...signupdata})
+        const response=await axios.post(`${Url}/register`,{...signupdata})
         console.log("reached",response.data);
         if(response.data.created===false){
           toast.error(response.data.status, { position: 'top-center', autoClose: 3000 });
         }else{
         const {token}= response.data
         console.log("destru",token);
-        // localStorage.setItem('user', JSON.stringify({ token, user: data.data }))
         localStorage.setItem('user',JSON.stringify({token,user:response.data}))
         if(response.data.created){
           navigate('/')
@@ -146,49 +146,3 @@ function Signup() {
 }
 
 export default Signup
-
-// import React from 'react'
-
-// function Signup() {
-//   return (
-//     <div>
-//     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '90vh' }}>
-//       <form className="form card">
-//         <div className="card_header">
-//           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
-//             <path fill="none" d="M0 0h24v24H0z"></path>
-//             <path fill="currentColor" d="M4 15h2v5h12V4H6v5H4V3a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-6zm6-4V8l5 4-5 4v-3H2v-2h8z"></path>
-//           </svg>
-//           <h1 className="form_heading">SignUp</h1>
-//         </div>
-//         <div className="field">
-//           <label for="username">Username</label>
-//           <input className="input" name="username" type="text" placeholder="Username" id="username" 
-//         //   onChange={(e)=>{setUsername(e.target.value)}} 
-//           />
-//         </div>
-//         <div className="field">
-//           <label for="username">Username</label>
-//           <input className="input" name="username" type="text" placeholder="Username" id="username" 
-//         //   onChange={(e)=>{setUsername(e.target.value)}} 
-//           />
-//         </div>
-//         <div className="field">
-//           <label for="password">Password</label>
-//           <input className="input" name="password" type="password" placeholder="Password" id="password"
-//             // onChange={(e)=>{setPassword(e.target.value)}}
-//              />
-//         </div>
-//         <div className="field">
-//           <button type='submit' className="button">SignUp</button>
-//         </div>
-//         <p className='navSign'>Login</p>
-//       </form>
-
-
-//     </div>
-//     </div>
-//   )
-// }
-
-// export default Signup
