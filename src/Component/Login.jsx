@@ -15,6 +15,14 @@ function Login() {
         console.log("calledddd");
         console.log(logindata.email);
         console.log(logindata.password);
+        if(logindata.email==""){
+          toast.error("Please Enter Your Email", { position: 'top-center', autoClose: 3000 });
+          return
+        }
+        if(logindata.password==""){
+          toast.error("Please Enter Your Password", { position: 'top-center', autoClose: 3000 });
+          return
+        }
         const res = await axios.post('http://localhost:3000/login', { ...logindata });
         console.log("front end bscc",res.data);
         if(res.data.exist===false){
@@ -110,52 +118,3 @@ export default Login
 
 
 
-
-
-
-
-
-
-        // import React from 'react'
-        // import './Login.css'
-        // function Login() {
-        //   return (
-        //     <div>
-        //     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '90vh' }}>
-        //       <form className="form card">
-        //         <div className="card_header">
-        //           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
-        //             <path fill="none" d="M0 0h24v24H0z"></path>
-        //             <path fill="currentColor" d="M4 15h2v5h12V4H6v5H4V3a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-6zm6-4V8l5 4-5 4v-3H2v-2h8z"></path>
-        //           </svg>
-        //           <h1 className="form_heading">Log in</h1>
-        //         </div>
-        //         <div className="field">
-        //           <label for="username">Username</label>
-        //           <input className="input" name="username" type="text" placeholder="Username" id="username" 
-        //         //   onChange={(e)=>{setUsername(e.target.value)}} 
-        //           />
-        //         </div>
-        //         <div className="field">
-        //           <label for="password">Password</label>
-        //           <input className="input" name="password" type="password" placeholder="Password" id="password"
-        //             // onChange={(e)=>{setPassword(e.target.value)}}
-        //              />
-        //         </div>
-        //         <div className="field">
-        //           <button type='submit' className="button">Login</button>
-        //         </div>
-        //         <p className='navSign'>Signup</p>
-        //       </form>
-        
-        
-        //     </div>
-        //     </div>
-        //   )
-        // }
-        
-        // export default Login
-        
-        
-        
-        

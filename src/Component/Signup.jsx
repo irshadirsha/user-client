@@ -13,11 +13,22 @@ function Signup() {
         password: '',
       });
       const handleSignup =async()=>{
-        console.log("function cal")
-        console.log(signupdata.email)
-        console.log(signupdata.name)
-        console.log(signupdata.phone)
-        console.log(signupdata.password)
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(signupdata.email)) {
+      toast.error("Invalid email format", { position: 'top-center', autoClose: 3000 });
+      return; 
+    }
+    const phoneRegex = /^\d{10}$/;
+    if (!phoneRegex.test(signupdata.phone)) {
+      toast.error("Invalid phone number", { position: 'top-center', autoClose: 3000 });
+      return; 
+    }
+    
+        if (!signupdata.name || !signupdata.email || !signupdata.phone || !signupdata.password) {
+          toast.error("All fields are required", { position: 'top-center', autoClose: 3000 });
+          return; 
+        }
+
         const response=await axios.post('http://localhost:3000/register',{...signupdata})
         console.log("reached",response.data);
         if(response.data.created===false){

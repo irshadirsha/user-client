@@ -4,7 +4,10 @@ import { useNavigate } from 'react-router-dom';
 
 function Home() {
   const navigate=useNavigate()
-  const [isImageModalOpen, setIsImageModalOpen] = useState(false);
+  const [isImageModalOpen, setIsImageModalOpen] = useState(false); 
+  const [selectedImage, setSelectedImage] = useState({
+    image:""
+  });
   const [userdata,setUserData]=useState([])
   const openImageModal=()=>{
     setIsImageModalOpen(true)
@@ -24,9 +27,6 @@ function Home() {
     console.log(parsedUserData.token   );
 
     try {
-      // const response = await axios.get('http://localhost:3000/getdata', {
-      //   params: { email: mail },  
-      // });
       const response = await axios.get('http://localhost:3000/getdata', {
         params: { email: mail },
         headers: {
@@ -52,6 +52,39 @@ function Home() {
     localStorage.removeItem('user')
     navigate('/login')
  }
+ const handleImageUpdate = async (e) => {
+  e.preventDefault();
+  const storedUserData = localStorage.getItem('user');
+  console.log("from local storage", storedUserData);
+
+  if (storedUserData) {
+    const parsedUserData = JSON.parse(storedUserData);
+    console.log("user email:", parsedUserData.user.data.email);
+    const mail = parsedUserData.user.data.email;
+    console.log(parsedUserData.token   );
+
+  const formData= new FormData();
+  formData.append('file', selectedImage.image);
+  formData.append('upload_preset', 'I-club')
+  setIsImageModalOpen(false)
+  console.log("formdataaa",formData)
+  const  data = await axios.post(`https://api.cloudinary.com/v1_1/dce326gqy/image/upload?upload_preset=I-club`,formData);
+ console.log("back from cloudinary",data);
+ console.log("back from cloudinary",data.data.secure_url);
+ const url=data.data.secure_url
+ const response = await axios.post(
+  'http://localhost:3000/addimg',
+  { url },  
+  {
+    headers: {
+      Authorization: `Bearer ${parsedUserData.token}`,
+    },
+  }
+);
+ console.log("response after image",response.data);
+ fetchdata()
+  }
+ }
 
   return (
     <div className='bg-white h-screen'>
@@ -64,7 +97,7 @@ function Home() {
       <div className="bg-[#1f2d48] md:mx-20 text-white p-8 rounded-t-lg flex flex-col sm:flex-row items-center">
         <div className="bg-white rounded-md mr-4 flex-shrink-0">
           <img
-            src="https://media.istockphoto.com/id/1337144146/vector/default-avatar-profile-icon-vector.jpg?s=612x612&w=0&k=20&c=BIbFwuv7FxTWvh5S3vB6bkT0Qv8Vn8N5Ffseq84ClGI="
+             src={userdata.image ? userdata.image : "https://media.istockphoto.com/id/1337144146/vector/default-avatar-profile-icon-vector.jpg?s=612x612&w=0&k=20&c=BIbFwuv7FxTWvh5S3vB6bkT0Qv8Vn8N5Ffseq84ClGI="}
             alt="Profile"
             className="w-36 h-36 rounded-md object-cover object-top"
           />
@@ -97,29 +130,17 @@ function Home() {
         type="file"
         className="w-full border border-gray-300 py-2 px-3 rounded-lg bg-gray-100"
         accept="image/*"
-        // onChange={(e) => setSelectedImage(e.target.files[0])}
-        // onChange={handleImageUpdate}
-      //  onChange={(e) => {
-      //         const selectedFile = e.target.files[0];
-      //         if (selectedFile && selectedFile.type.includes('image')) {
-      //           setSelectedImage(selectedFile);
-      //           setErrors({ ...errors, profilerr: null }); // Clear the error here
-      //         } else {
-      //           setErrors({
-      //             ...errors,
-      //             profilerr: "Please select a valid image file.",
-      //           });
-      //           return;
-      //         }
-      //       }}
+       onChange={(e) => {
+              const selectedFile = e.target.files[0];
+              setSelectedImage({ ...selectedImage, image: selectedFile });
+            }}
           />
-          {/* {errors.profilerr && <p className="text-red-500 text-center">{errors.profilerr}</p>} */}
     </div>
     <div className="flex justify-end">
       <button
         type="button"
         className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition ease-in-out mr-2"
-        // onClick={handleImageUpdate }
+        onClick={handleImageUpdate }
         // disabled={!selectedFile}
       >
         Upload
