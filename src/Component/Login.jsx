@@ -1,7 +1,9 @@
 
 import React,{useState} from 'react'
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 function Login() {
+  const navigate=useNavigate()
     const [logindata, setLoginData] = useState({
         email: '',
         password: '',
@@ -11,7 +13,11 @@ function Login() {
         console.log(logindata.email);
         console.log(logindata.password);
         const res = await axios.post('http://localhost:3000/login', { ...logindata });
-        console.log(res.data);
+        console.log("front end bscc",res.data);
+        const {token}= res.data
+        console.log(token);
+        localStorage.setItem('user',JSON.stringify({token,user:res.data}))
+         navigate('/')
       }
     return (
         <div>

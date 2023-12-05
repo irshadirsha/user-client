@@ -1,6 +1,8 @@
 import React,{useState} from 'react'
+import {useNavigate} from 'react-router-dom'
 import axios from 'axios';
 function Signup() {
+  const navigate=useNavigate()
     const [signupdata, setSignupData] = useState({
         name: '',
         email: '',
@@ -14,7 +16,12 @@ function Signup() {
         console.log(signupdata.phone)
         console.log(signupdata.password)
         const response=await axios.post('http://localhost:3000/register',{...signupdata})
-        console.log(response.data);
+        console.log("reached",response.data);
+        const {token}= response.data
+        console.log("destru",token);
+        // localStorage.setItem('user', JSON.stringify({ token, user: data.data }))
+        localStorage.setItem('user',JSON.stringify({token,user:response.data}))
+        navigate('/')
       }
   return (
     <div>
