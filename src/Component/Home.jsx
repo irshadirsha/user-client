@@ -64,7 +64,6 @@ function Home() {
     console.log("user email:", parsedUserData.user.data.email);
     const mail = parsedUserData.user.data.email;
     console.log(parsedUserData.token   );
-
   const formData= new FormData();
   formData.append('file', selectedImage.image);
   formData.append('upload_preset', 'I-club')
@@ -176,3 +175,17 @@ function Home() {
 }
 
 export default Home
+
+
+{/* <div className="d-flex justify-between items-center mb-4">
+<p className="text-xl font-semibold mb-0">Account Deatails</p>
+</div>
+<div className="bg-[#1f2d48]m-6  rounded-md  ">  
+<div className="text-center md:py-6 flex-grow">
+  <h1 className="text-lg text-black font-mono font-bold">Username:{userdata.name}</h1>
+  <h1 className="text-lg text-black font-mono font-bold">Emal:{userdata.email}</h1>
+  <h1 className="text-lg text-black font-mono font-bold">phone:{userdata.phone}</h1>
+</div> 
+</div>
+</div>
+</div> */}
