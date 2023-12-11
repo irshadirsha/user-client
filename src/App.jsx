@@ -5,6 +5,7 @@ import HomePage from './pages/HomePage'
 import SignupPage from './pages/SignupPage'
 import LoginPage from './pages/LoginPage'
 import Protectedroute from './Component/Protectedroute'
+import ChatPage from './pages/ChatPage'
 
 
 function App() {
@@ -17,6 +18,7 @@ function App() {
        <Route path='/' element={<Protectedroute><HomePage/></Protectedroute>}></Route>
        <Route path='/signup' element={<SignupPage/>}></Route>
        <Route path='/login' element={<LoginPage/>}></Route>
+       <Route path='/chat' element={<ChatPage/>}></Route>
        </Routes>
        </BrowserRouter>
       </div>
