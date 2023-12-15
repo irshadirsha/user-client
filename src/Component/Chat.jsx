@@ -4,26 +4,85 @@ function Chat() {
   const Url = import.meta.env.VITE_BASEURL;
   const [chatmsg,setChatMsg]=useState('')
   const [continfo,setContInfo]=useState([])
+  const [conndata,setConnData]=useState([])
   useEffect(()=>{
    getContact()
+  
   },[])
   const getContact=async()=>{
-   const response= await axios.get(`${Url}/getchat`)
+    const storedUserData = localStorage.getItem('user');
+  console.log("from local storage", storedUserData);
+
+  if (storedUserData) {
+   
+    const parsedUserData = JSON.parse(storedUserData);
+    console.log(parsedUserData.token   );
+   const response= await axios.get(`${Url}/getchat`, { headers: {
+      Authorization: `Bearer ${parsedUserData.token}`,
+    }})
    console.log(response.data);
    setContInfo(response.data)
+   getchatboth()
   }
+}
+// const getchatboth=async()=>{
+//    const storedUserData = localStorage.getItem('user');
+//    console.log("from local storage", storedUserData);
+ 
+//    if (storedUserData) {
+    
+//      const parsedUserData = JSON.parse(storedUserData);
+//      console.log("condata-------",conndata._id);
+//    const chats=await axios.get(`${Url}/getchatmsg`,{ params: { reciverId:conndata._id  } ,
+//    headers: {
+//       Authorization: `Bearer ${parsedUserData.token}`,
+//     },
+// })
+//    console.log(chats.data);
+//   }
+// }
+ 
   const handleChat=async()=>{
     console.log("chat message",chatmsg)
-
+    const storedUserData = localStorage.getItem('user');
+    console.log("from local storage", storedUserData);
+  
+    if (storedUserData) {
+      const parsedUserData = JSON.parse(storedUserData);
+      console.log(parsedUserData.token   );
     try {
-      const res = await axios.post(`${Url}/addchat`, { message:chatmsg });
+    
+      const res = await axios.post(`${Url}/addchat`, { message:chatmsg,reciverId:conndata._id },
+      {
+         headers: {
+           Authorization: `Bearer ${parsedUserData.token}`,
+         },
+       }
+      );
       console.log("chat result",res.data);
     } catch (error) {
       console.error('Error while sending message:', error);
     }
+   }else{
+      console.log("user is not exist in localstorege");
+   }
 
   }
-//   console.log(continfo[0].name);
+  const handleItemClick=async(id)=>{
+   console.log(id);
+   const storedUserData = localStorage.getItem('user');
+   console.log("from local storage", storedUserData);
+ 
+   if (storedUserData) {
+     const parsedUserData = JSON.parse(storedUserData);
+     const resp=await axios.get(`${Url}/connectChat`,{ params: { UserID: id },
+     headers: {
+      Authorization: `Bearer ${parsedUserData.token}`,
+    }, })
+     console.log(resp.data);
+     setConnData(resp.data)
+  }
+}
   return (
     <div className='bg-green-300 flex '>
       <div className='bg-red-300 h-screen w-1/4'>
@@ -42,7 +101,7 @@ function Chat() {
 </div>
 
 
-            <h1 className='text-left text-xl'>{item.name}</h1>
+            <h1  onClick={() => handleItemClick(item._id)}  className='text-left text-xl'>{item.name}</h1>
          </div>
           )) }
         </div>
@@ -57,13 +116,13 @@ function Chat() {
                   <circle cx="8" cy="8" r="8" fill="currentColor"></circle>
                </svg>
             </span>
-         <img src="https://images.unsplash.com/photo-1549078642-b2ba4bda0cdb?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=facearea&amp;facepad=3&amp;w=144&amp;h=144" alt="" class="w-10 sm:w-16 h-10 sm:h-16 rounded-full"/>
+         <img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_640.png" alt="" class="w-10 sm:w-16 h-10 sm:h-16 rounded-full"/>
          </div>
          <div class="flex flex-col leading-tight">
             <div class="text-2xl mt-1 flex items-center">
-               <span class="text-gray-700 mr-3">Anderson Vanhron</span>
+               <span class="text-gray-700 mr-3">{conndata.name}</span>
             </div>
-            <span class="text-lg text-gray-600">Junior Developer</span>
+            {/* <span class="text-lg text-gray-600">Junior Developer</span> */}
          </div>
       </div>
       <div class="flex items-center space-x-2">
