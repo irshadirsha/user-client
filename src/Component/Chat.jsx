@@ -1,8 +1,17 @@
-import React,{useState} from 'react'
+import React,{useState,useEffect} from 'react'
 import axios from "axios"
 function Chat() {
   const Url = import.meta.env.VITE_BASEURL;
   const [chatmsg,setChatMsg]=useState('')
+  const [continfo,setContInfo]=useState([])
+  useEffect(()=>{
+   getContact()
+  },[])
+  const getContact=async()=>{
+   const response= await axios.get(`${Url}/getchat`)
+   console.log(response.data);
+   setContInfo(response.data)
+  }
   const handleChat=async()=>{
     console.log("chat message",chatmsg)
 
@@ -14,10 +23,29 @@ function Chat() {
     }
 
   }
+//   console.log(continfo[0].name);
   return (
     <div className='bg-green-300 flex '>
       <div className='bg-red-300 h-screen w-1/4'>
-        
+        <div className='bg-yellow-200 h-20 flex justify-center items-center'>
+         <h2 className='text-2xl font-mono font-bold text-gray-600 '>Contacts</h2>
+        </div>
+        <div className='bg-purple-300 h-96 p-2'>
+         {  continfo.map((item,index)=>(
+         <div key={index} className='bg-red p-2 flex gap-4'>
+         <div className=' w-12 h-12 overflow-hidden'>
+  {item.image ? (
+    <img className=' object-cover ' src={item.image} alt="Item" />
+  ) : (
+    <img className='object-cover w-full h-full' src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_640.png" alt="Default" />
+  )}
+</div>
+
+
+            <h1 className='text-left text-xl'>{item.name}</h1>
+         </div>
+          )) }
+        </div>
       </div>
       <div className='w-3/4'>
           <div className="flex-1 p-2 sm:p-6 justify-between flex flex-col h-screen ">
