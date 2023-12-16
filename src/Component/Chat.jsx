@@ -5,6 +5,7 @@ function Chat() {
   const [chatmsg,setChatMsg]=useState('')
   const [continfo,setContInfo]=useState([])
   const [conndata,setConnData]=useState([])
+  const [message,setMessage]=useState([])
   useEffect(()=>{
    getContact()
   
@@ -22,7 +23,7 @@ function Chat() {
     }})
    console.log(response.data);
    setContInfo(response.data)
-   getchatboth()
+   // getchatboth()
   }
 }
 // const getchatboth=async()=>{
@@ -79,10 +80,13 @@ function Chat() {
      headers: {
       Authorization: `Bearer ${parsedUserData.token}`,
     }, })
-     console.log(resp.data);
-     setConnData(resp.data)
+     console.log(resp.data.data);
+     console.log(resp.data.result);
+     setConnData(resp.data.data)
+     setMessage(resp.data.result)
   }
 }
+
   return (
     <div className='bg-green-300 flex '>
       <div className='bg-red-300 h-screen w-1/4'>
@@ -146,35 +150,46 @@ function Chat() {
       </div>
       <div id="messages" className="flex flex-col space-y-4 p-3 overflow-y-auto scrollbar-thumb-blue scrollbar-thumb-rounded scrollbar-track-blue-lighter scrollbar-w-2 scrolling-touch">
         {/* ... Messages content remains the same */}
+        <h1>conndata._id</h1>
+        
+      {  message.map((items,index)=>(
+         
         <div class="chat-message">
          <div class="flex items-end">
             <div class="flex flex-col space-y-2 text-xs max-w-xs mx-2 order-2 items-start">
         
                <div><span class="px-4 py-2 rounded-lg inline-block rounded-bl-none bg-gray-300 text-gray-600">
                 <div className='flex justify-between'>
-                <h1 className='text-black text-xs font-thin text-start'>irsha</h1>
-                <h1 className='text-black text-xs font-thin text-end'>06:00 am</h1>
+                {/* <h1 className='text-black text-xs font-thin text-start'>{items.receiver.name}</h1> */}
+                <h1 className='text-black text-xs font-thin text-start'>06:00 am</h1>
                 </div>
-                Can be verified on any platform using docker</span>
+               {items.message}</span>
                </div>
             </div>
-            <img src="https://images.unsplash.com/photo-1549078642-b2ba4bda0cdb?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=facearea&amp;facepad=3&amp;w=144&amp;h=144" alt="My profile" class="w-6 h-6 rounded-full order-1"/>
+            <img src={items.receiver.image} alt="My profile" class="w-6 h-6 rounded-full order-1"/>
          </div>    
       </div>
+            ))
+         }
+          {  message.map((items,index)=>(
       <div class="chat-message">
          <div class="flex items-end justify-end">
             <div class="flex flex-col space-y-2 text-xs max-w-xs mx-2 order-1 items-end">
                <div><span class="px-4 py-2 rounded-lg inline-block rounded-br-none bg-blue-600 text-white ">
                <div className='flex justify-between'>
-                <h1 className='text-white text-xs font-thin text-start'>irsha</h1>
+                {/* <h1 className='text-white text-xs font-thin text-start'>irsha</h1> */}
                 <h1 className='text-white text-xs font-thin text-end'>06:00 am</h1>
                 </div>
-                Your error message says permission denied, npm global installs must be given root privileges.</span></div>
+                {items.message}</span></div>
             </div>
-            <img src="https://images.unsplash.com/photo-1590031905470-a1a1feacbb0b?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=facearea&amp;facepad=3&amp;w=144&amp;h=144" alt="My profile" class="w-6 h-6 rounded-full order-2"/>
+            <img src={items.sender.image} alt="My profile" class="w-6 h-6 rounded-full order-2"/>
          </div>
       </div>
+         ))
+      }
       </div>
+
+      
       <div className="border-t-2 border-gray-200 px-4 pt-4 mb-2 sm:mb-0">
         {/* ... Rest of the content remains the same */}
         <div class="relative flex">
@@ -383,7 +398,7 @@ export default Chat
 
 
 
-
+{/* <img src="https://images.unsplash.com/photo-1590031905470-a1a1feacbb0b?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=facearea&amp;facepad=3&amp;w=144&amp;h=144" alt="My profile" class="w-6 h-6 rounded-full order-2"/> */}
 
 
 
